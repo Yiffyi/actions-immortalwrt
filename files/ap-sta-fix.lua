@@ -16,6 +16,7 @@ local cached_ifnames = {}
 
 function t()
     local commit = false
+    local delay = 10000
     for k, v in pairs(cached_ifnames) do
         local radio = k
         local sta_ifname = v.sta
@@ -33,8 +34,8 @@ function t()
                     commit = true
                     -- after commit: driver reload, STA disappears & offline for a while, AP disappears completely
                 end
-                print("+3000ms")
-                timer:set(3000)
+                print("+10000ms")
+                delay = 10000
             elseif ap == nil or ap["htmode"] == "NOHT" then
                 -- STA is online already, but AP is offline or disabled
                 io.stderr:write("-- AP disabled OR offline\n")
@@ -44,21 +45,22 @@ function t()
                 -- after commit: driver reload, STA & AP both disappears & offline for a while
                 -- we need to give STA more time to scan and associate, otherwise AP will got disabled again
                 print("+30000ms")
-                timer:set(30000)
+                delay = 30000
             else
                 print("-- seems NORMAL")
                 print("+10000ms")
-                timer:set(10000)
+                delay = 10000
             end
         else
             io.stderr:write("-- STA not exist\n")
-            print("+3000ms")
-            timer:set(3000)
+            print("+10000ms")
+            delay = 10000
         end
     end
     if commit then
         conn:call("uci", "commit", { config = "wireless" })
     end
+    timer:set(delay)
 end
 
 timer = uloop.timer(t)
@@ -75,6 +77,7 @@ timer = uloop.timer(t)
 -- You must explicitly assign an ifname for all networks
 function init()
     local r = conn:call("uci", "get", { config = "wireless", match = { mode = "sta" }})["values"]
+    cached_ifnames = {}
     local total = 0
     for section, v in pairs(r) do
         if v["ifname"] ~= nil then
@@ -91,12 +94,14 @@ function init()
             end
         end
     end
+    uloop.timer(init, 60000)
     if total == 0 then
-        io.stderr:write("-- No STA & AP found. Program terminated.\n")
-        os.exit(1)
+        io.stderr:write("-- No STA & AP found\n")
+        -- os.exit(1)
+    else
+        io.stderr:write(string.format("-- Found %d radio(s) with STA & AP\n", total))
+        timer:set(1000)
     end
-    io.stderr:write(string.format("-- Found %d radio(s) with STA & AP\n", total))
-    timer:set(1000)
 end
 
 -- don't be panic if the system just booted
