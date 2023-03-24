@@ -6,13 +6,14 @@ require "uloop"
 uloop.init()
 
 -- Establish connection
-local conn = ubus.connect()
+conn = ubus.connect()
 if not conn then
     error("Failed to connect to ubusd")
 end
 
-local timer
-local cached_ifnames = {}
+timer = nil
+total_ifnames = nil
+cached_ifnames = {}
 
 function t()
     local commit = false
@@ -95,12 +96,15 @@ function init()
         end
     end
     uloop.timer(init, 60000)
-    if total == 0 then
-        io.stderr:write("-- No STA & AP found\n")
-        -- os.exit(1)
-    else
-        io.stderr:write(string.format("-- Found %d radio(s) with STA & AP\n", total))
-        timer:set(1000)
+    if total ~= total_ifnames then
+        if total == 0 then
+            io.stderr:write("-- No STA & AP found\n")
+            -- os.exit(1)
+        else
+            io.stderr:write(string.format("-- Found %d radio(s) with STA & AP\n", total))
+            timer:set(1000)
+        end
+        total_ifnames = total
     end
 end
 
