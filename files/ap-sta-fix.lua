@@ -92,10 +92,10 @@ function init()
         end
     end
     if total == 0 then
-        io.stderr:write("-- No STA & AP found. Program terminated.")
+        io.stderr:write("-- No STA & AP found. Program terminated.\n")
         os.exit(1)
     end
-    io.stderr:write(string.format("-- Found %d radio(s) with STA & AP", total))
+    io.stderr:write(string.format("-- Found %d radio(s) with STA & AP\n", total))
     timer:set(1000)
 end
 
