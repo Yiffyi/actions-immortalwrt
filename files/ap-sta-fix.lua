@@ -18,8 +18,7 @@ cached_ifnames = {}
 function t()
     local commit = false
     local delay = 10000
-    for k, v in pairs(cached_ifnames) do
-        local radio = k
+    for radio, v in pairs(cached_ifnames) do
         local sta_ifname = v.sta
         local ap_ifname = v.ap
         local ap = conn:call("iwinfo", "info", { device = ap_ifname })
@@ -40,7 +39,7 @@ function t()
             elseif ap == nil or ap["htmode"] == "NOHT" then
                 -- STA is online already, but AP is offline or disabled
                 io.stderr:write("-- AP disabled OR offline\n")
-                conn:call("uci", "set", { config = "wireless", section = "radio1", values = { channel = sta["channel"] } })
+                conn:call("uci", "set", { config = "wireless", section = radio, values = { channel = sta["channel"] } })
                 conn:call("uci", "delete", { config = "wireless", match = { mode = "ap", device = radio }, option = "disabled" })
                 commit = true
                 -- after commit: driver reload, STA & AP both disappears & offline for a while
