@@ -63,15 +63,16 @@ jobs:
     - name: Compile
       id: compile
       run: |
-        cd sdk
+        cd /workdir/sdk
         chmod +x $GITHUB_WORKSPACE/$PACKAGE_BUILD_SH
-        chmod +x $GITHUB_WORKSPACE/$IMAGE_BUILD_SH
 
         $GITHUB_WORKSPACE/$PACKAGE_BUILD_SH
 
-        rm -r $GITHUB_WORKSPACE/imgbuilder/packages
-        ln -sf /workdir/sdk/bin/packages $GITHUB_WORKSPACE/imgbuilder/packages
-        
+        cd /workdir/imgbuilder
+        chmod +x $GITHUB_WORKSPACE/$IMAGE_BUILD_SH
+        rm -r /workdir/imgbuilder/packages
+        ln -sf /workdir/sdk/bin/packages /workdir/imgbuilder/packages
+
         $GITHUB_WORKSPACE/$IMAGE_BUILD_SH
 
         echo "::set-output name=status::success"
