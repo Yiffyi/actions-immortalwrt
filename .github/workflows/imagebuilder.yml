@@ -1,0 +1,85 @@
+#
+# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
+#
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
+# https://github.com/P3TERX/Actions-OpenWrt
+# Description: Build OpenWrt using GitHub Actions
+#
+
+name: Partial Build
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+
+env:
+  FEEDS_CONF: feeds.conf.default
+  IMGBUILDER_URL: https://downloads.openwrt.org/releases/22.03.5/targets/mediatek/mt7622/openwrt-imagebuilder-22.03.5-mediatek-mt7622.Linux-x86_64.tar.xz
+  SDK_URL: https://downloads.openwrt.org/releases/22.03.5/targets/mediatek/mt7622/openwrt-sdk-22.03.5-mediatek-mt7622_gcc-11.2.0_musl.Linux-x86_64.tar.xz
+  SDK_CONFIG: sdk.config
+  PACKAGE_BUILD_SH: package.sh
+  IMAGE_BUILD_SH: image.sh
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+
+    - name: Download OpenWRT ImageBuilder and SDK
+      working-directory: /workdir
+      run: |
+        curl -fsSL "$SDK_URL" | tar xf - -C sdk --strip-components 1
+        curl -fsSL "$IMGBUILDER_URL" | tar xf - -C imgbuilder --strip-components 1
+
+    - name: Load custom feeds
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF sdk/feeds.conf.default
+
+    - name: Install feeds
+      run: cd sdk && ./scripts/feeds update -a && ./scripts/feeds install -a
+
+    - name: Load custom configuration
+      run: |
+        [ -e files ] && mv files imgbuilder/files
+        [ -e $SDK_CONFIG ] && mv $SDK_CONFIG sdk/.config
+
+    - name: Compile the packages
+      id: compile
+      run: |
+        cd sdk
+        chmod +x $GITHUB_WORKSPACE/$PACKAGE_BUILD_SH
+        $GITHUB_WORKSPACE/$PACKAGE_BUILD_SH
+        echo "::set-output name=status::success"
+        echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+    - name: Check space usage
+      if: (!cancelled())
+      run: df -hT
+
+    - name: Upload bin directory
+      uses: actions/upload-artifact@main
+      if: steps.compile.outputs.status == 'success'
+      with:
+        name: sdk_bin${{ env.FILE_DATE }}
+        path: sdk/bin
+
+    - name: Delete workflow runs
+      uses: GitRML/delete-workflow-runs@main
+      with:
+        retain_days: 1
+        keep_minimum_runs: 3
+
