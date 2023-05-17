@@ -45,6 +45,8 @@ jobs:
         mkdir sdk imgbuilder
         curl -fsSL "$SDK_URL" | tar xJf - -C sdk --strip-components 1
         curl -fsSL "$IMGBUILDER_URL" | tar xJf - -C imgbuilder --strip-components 1
+        ln -sf /workdir/sdk $GITHUB_WORKSPACE/sdk
+        ln -sf /workdir/imgbuilder $GITHUB_WORKSPACE/imgbuilder
 
     - name: Load custom feeds
       run: |
