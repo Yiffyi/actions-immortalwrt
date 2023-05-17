@@ -42,8 +42,8 @@ jobs:
     - name: Download OpenWRT ImageBuilder and SDK
       working-directory: /workdir
       run: |
-        curl -fsSL "$SDK_URL" | tar xf - -C sdk --strip-components 1
-        curl -fsSL "$IMGBUILDER_URL" | tar xf - -C imgbuilder --strip-components 1
+        curl -fsSL "$SDK_URL" | tar xJf - -C sdk --strip-components 1
+        curl -fsSL "$IMGBUILDER_URL" | tar xJf - -C imgbuilder --strip-components 1
 
     - name: Load custom feeds
       run: |
