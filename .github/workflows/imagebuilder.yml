@@ -60,12 +60,20 @@ jobs:
         [ -e files ] && mv files imgbuilder/files
         [ -e $SDK_CONFIG ] && mv $SDK_CONFIG sdk/.config
 
-    - name: Compile the packages
+    - name: Compile
       id: compile
       run: |
         cd sdk
         chmod +x $GITHUB_WORKSPACE/$PACKAGE_BUILD_SH
+        chmod +x $GITHUB_WORKSPACE/$IMAGE_BUILD_SH
+
         $GITHUB_WORKSPACE/$PACKAGE_BUILD_SH
+
+        rm -r $GITHUB_WORKSPACE/imgbuilder/packages
+        ln -sf /workdir/sdk/bin/packages $GITHUB_WORKSPACE/imgbuilder/packages
+        
+        $GITHUB_WORKSPACE/$IMAGE_BUILD_SH
+
         echo "::set-output name=status::success"
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
@@ -73,12 +81,19 @@ jobs:
       if: (!cancelled())
       run: df -hT
 
-    - name: Upload bin directory
+    - name: Upload SDK bin directory
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success'
       with:
         name: sdk_bin${{ env.FILE_DATE }}
         path: sdk/bin
+
+    - name: Upload ImageBuilder bin directory
+      uses: actions/upload-artifact@main
+      if: steps.compile.outputs.status == 'success'
+      with:
+        name: imgbuilder_bin${{ env.FILE_DATE }}
+        path: imgbuilder/bin
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main

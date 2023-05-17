@@ -1,0 +1,1 @@
+make image PROFILE="xiaomi_redmi-router-ax6s" PACKAGES="luci luci-app-passwall" FILES="files"
