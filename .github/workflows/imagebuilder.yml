@@ -16,8 +16,8 @@ on:
 
 env:
   FEEDS_CONF: sdk.feeds.conf
-  IMGBUILDER_URL: https://downloads.openwrt.org/releases/22.03.5/targets/mediatek/mt7622/openwrt-imagebuilder-22.03.5-mediatek-mt7622.Linux-x86_64.tar.xz
-  SDK_URL: https://downloads.openwrt.org/releases/22.03.5/targets/mediatek/mt7622/openwrt-sdk-22.03.5-mediatek-mt7622_gcc-11.2.0_musl.Linux-x86_64.tar.xz
+  IMGBUILDER_URL: https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/openwrt-imagebuilder-mediatek-mt7622.Linux-x86_64.tar.xz
+  SDK_URL: https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/openwrt-sdk-mediatek-mt7622_gcc-12.3.0_musl.Linux-x86_64.tar.xz
   SDK_CONFIG: sdk.config
   PACKAGE_BUILD_SH: package.sh
   IMAGE_BUILD_SH: image.sh
@@ -45,34 +45,31 @@ jobs:
         mkdir sdk imgbuilder
         curl -fsSL "$SDK_URL" | tar xJf - -C sdk --strip-components 1
         curl -fsSL "$IMGBUILDER_URL" | tar xJf - -C imgbuilder --strip-components 1
-        ln -sf /workdir/sdk $GITHUB_WORKSPACE/sdk
-        ln -sf /workdir/imgbuilder $GITHUB_WORKSPACE/imgbuilder
 
     - name: Load custom feeds
       run: |
-        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF sdk/feeds.conf.default
+        [ -e $FEEDS_CONF ] && cat $FEEDS_CONF >> /workdir/sdk/feeds.conf.default
 
     - name: Install feeds
-      run: cd sdk && ./scripts/feeds update -a && ./scripts/feeds install -a
+      working-directory: /workdir/sdk
+      run: ./scripts/feeds update -a && ./scripts/feeds install -a
 
     - name: Load custom configuration
       run: |
-        [ -e files ] && mv files imgbuilder/files
-        [ -e $SDK_CONFIG ] && mv $SDK_CONFIG sdk/.config
+        [ -e files ] && mv files /workdir/imgbuilder/files
+        [ -e $SDK_CONFIG ] && mv $SDK_CONFIG /workdir/sdk/.config
 
     - name: Compile
       id: compile
       run: |
-        cd /workdir/sdk
         chmod +x $GITHUB_WORKSPACE/$PACKAGE_BUILD_SH
-
+        chmod +x $GITHUB_WORKSPACE/$IMAGE_BUILD_SH
+        cd /workdir/sdk
         $GITHUB_WORKSPACE/$PACKAGE_BUILD_SH
 
-        cd /workdir/imgbuilder
-        chmod +x $GITHUB_WORKSPACE/$IMAGE_BUILD_SH
         rm -r /workdir/imgbuilder/packages
         ln -sf /workdir/sdk/bin/packages /workdir/imgbuilder/packages
-
+        cd /workdir/imgbuilder
         $GITHUB_WORKSPACE/$IMAGE_BUILD_SH
 
         echo "::set-output name=status::success"
@@ -87,14 +84,14 @@ jobs:
       if: steps.compile.outputs.status == 'success'
       with:
         name: sdk_bin${{ env.FILE_DATE }}
-        path: sdk/bin
+        path: /workdir/sdk/bin
 
     - name: Upload ImageBuilder bin directory
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success'
       with:
         name: imgbuilder_bin${{ env.FILE_DATE }}
-        path: imgbuilder/bin
+        path: /workdir/imgbuilder/bin
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
