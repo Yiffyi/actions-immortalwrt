@@ -48,7 +48,7 @@ jobs:
 
     - name: Load custom feeds
       run: |
-        [ -e $FEEDS_CONF ] && cat $FEEDS_CONF >> /workdir/sdk/feeds.conf.default
+        [ -e $FEEDS_CONF ] && cat $FEEDS_CONF /workdir/sdk/feeds.conf.default > /workdir/sdk/feeds.conf
 
     - name: Install feeds
       working-directory: /workdir/sdk
