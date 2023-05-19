@@ -8,10 +8,12 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Partial Build
+name: Image Builder
 
 on:
-  repository_dispatch:
+  push:
+    branches:
+      - imagebuilder
   workflow_dispatch:
 
 env:
