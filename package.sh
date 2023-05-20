@@ -1,4 +1,3 @@
 #!/bin/bash
-echo -e "$(nproc) thread compile"
 make defconfig
-make -j$(nproc) package/luci-app-passwall/compile
+make -j package/luci-app-passwall/compile || make -j1 package/luci-app-passwall/compile V=s
