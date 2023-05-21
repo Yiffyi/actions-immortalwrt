@@ -8,8 +8,9 @@ cp /workdir/keyring/usign/* files/etc/opkg/keys/
 
 echo "src from_sdk file:///workdir/sdk/bin/packages" >> repositories.conf.new
 cat repositories.conf >> repositories.conf.new
-echo "src/gz immortalwrt_packages https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/packages" >> repositories.conf.new
-echo "src/gz immortalwrt_luci https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/luci" >> repositories.conf.new
+echo "src/gz immortalwrt_base https://downloads.immortalwrt.org/snapshots/packages/aarch64_cortex-a53/base/" >> repositories.conf.new
+echo "src/gz immortalwrt_packages https://downloads.immortalwrt.org/snapshots/packages/aarch64_cortex-a53/packages/" >> repositories.conf.new
+echo "src/gz immortalwrt_luci https://downloads.immortalwrt.org/snapshots/packages/aarch64_cortex-a53/luci/" >> repositories.conf.new
 mv repositories.conf.new repositories.conf
 
-make image PROFILE="xiaomi_redmi-router-ax6s" PACKAGES="libubox-lua luci luci-app-passwall luci-i18n-base-zh-cn luci-i18n-firewall-zh-cn luci-i18n-passwall-zh-cn" FILES="files"
+make image PROFILE="xiaomi_redmi-router-ax6s" PACKAGES="libubox-lua -dnsmasq dnsmasq-full luci luci-app-passwall luci-i18n-base-zh-cn luci-i18n-firewall-zh-cn luci-i18n-passwall-zh-cn" FILES="files"
