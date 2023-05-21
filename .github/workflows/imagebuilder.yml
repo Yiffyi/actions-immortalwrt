@@ -54,9 +54,6 @@ jobs:
         [ -e $FEEDS_CONF ] && cat $FEEDS_CONF /workdir/sdk/feeds.conf.default > /workdir/sdk/feeds.conf
         [ -e $SDK_CONFIG ] && mv $SDK_CONFIG /workdir/sdk/.config
 
-        echo "src from_sdk file:///workdir/sdk/bin/packages" | cat - /workdir/imgbuilder/repositories.conf > /workdir/imgbuilder/repositories.conf.new
-        mv /workdir/imgbuilder/repositories.conf.new /workdir/imgbuilder/repositories.conf
-
     - name: Compile packages
       run: |
         chmod +x $GITHUB_WORKSPACE/$PACKAGE_BUILD_SH
