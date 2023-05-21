@@ -1,5 +1,5 @@
 #!/bin/bash
-exit
+
 ./scripts/feeds update -a && ./scripts/feeds install luci-app-passwall
 
 make defconfig
