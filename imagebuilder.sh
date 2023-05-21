@@ -8,7 +8,7 @@
 
 echo "src from_sdk file:///workdir/sdk/bin/packages" >> repositories.conf.new
 cat repositories.conf >> repositories.conf.new
-# echo "src/gz immortalwrt_packages https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/packages" >> repositories.conf.new
+echo "src/gz immortalwrt_packages https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/packages" >> repositories.conf.new
 # echo "src/gz immortalwrt_luci https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/luci" >> repositories.conf.new
 mv repositories.conf.new repositories.conf
 
