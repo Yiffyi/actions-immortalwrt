@@ -17,10 +17,8 @@ on:
   workflow_dispatch:
 
 env:
-  FEEDS_CONF: sdk.feeds.conf
-  IMGBUILDER_URL: https://downloads.immortalwrt.org/releases/18.06-k5.4-SNAPSHOT/targets/mediatek/mt7622/immortalwrt-imagebuilder-18.06-k5.4-SNAPSHOT-mediatek-mt7622.Linux-x86_64.tar.xz
-  SDK_URL: https://downloads.immortalwrt.org/releases/18.06-k5.4-SNAPSHOT/targets/mediatek/mt7622/immortalwrt-sdk-18.06-k5.4-SNAPSHOT-mediatek-mt7622_gcc-8.4.0_musl.Linux-x86_64.tar.xz
-  SDK_CONFIG: sdk.config
+  IMGBUILDER_URL: https://downloads.openwrt.org/releases/22.03.5/targets/mediatek/mt7622/openwrt-imagebuilder-22.03.5-mediatek-mt7622.Linux-x86_64.tar.xz
+  SDK_URL: https://downloads.openwrt.org/releases/22.03.5/targets/mediatek/mt7622/openwrt-sdk-22.03.5-mediatek-mt7622_gcc-11.2.0_musl.Linux-x86_64.tar.xz
   PACKAGE_BUILD_SH: package.sh
   IMAGE_BUILD_SH: image.sh
   TZ: Asia/Shanghai
@@ -52,7 +50,6 @@ jobs:
       run: |
         [ -e files ] && mv files /workdir/imgbuilder/files
         [ -e $FEEDS_CONF ] && cat $FEEDS_CONF /workdir/sdk/feeds.conf.default > /workdir/sdk/feeds.conf
-        [ -e $SDK_CONFIG ] && mv $SDK_CONFIG /workdir/sdk/.config
 
     - name: Compile packages
       run: |
