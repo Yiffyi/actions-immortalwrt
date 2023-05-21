@@ -37,7 +37,7 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
 
-    - name: Download OpenWRT ImageBuilder and SDK
+    - name: Download OpenWRT ImageBuilder
       working-directory: /workdir
       run: |
         mkdir imgbuilder

@@ -3,8 +3,9 @@
 mkdir -p files/etc/opkg/keys
 git clone --depth=1 https://github.com/immortalwrt/keyring /workdir/keyring
 cp /workdir/keyring/usign/* keys/
-# cp /workdir/keyring/usign/* files/etc/opkg/keys/
-# echo "src/gz immortalwrt_2102_packages https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/packages" > files/etc/opkg/customfeeds.conf
+cp /workdir/keyring/usign/* files/etc/opkg/keys/
+echo "src/gz immortalwrt_2102_packages https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/packages" > files/etc/opkg/customfeeds.conf
+echo "src/gz immortalwrt_2102_luci https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/luci" >> files/etc/opkg/customfeeds.conf
 
 echo "src/gz immortalwrt_packages https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/packages" >> repositories.conf.new
 echo "src/gz immortalwrt_luci https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/luci" >> repositories.conf.new
