@@ -6,7 +6,8 @@ cp /workdir/keyring/usign/* keys/
 # cp /workdir/keyring/usign/* files/etc/opkg/keys/
 # echo "src/gz immortalwrt_2102_packages https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/packages" > files/etc/opkg/customfeeds.conf
 
-echo "src from_sdk file:///workdir/sdk/bin/packages" >> repositories.conf.new
+echo "src passwall_luci file:///workdir/sdk/bin/packages/aarch64_cortex-a53/passwall_luci" > repositories.conf.new
+echo "src passwall_packages file:///workdir/sdk/bin/packages/aarch64_cortex-a53/passwall_packages" >> repositories.conf.new
 cat repositories.conf >> repositories.conf.new
 echo "src/gz immortalwrt_packages https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/packages" >> repositories.conf.new
 # echo "src/gz immortalwrt_luci https://downloads.immortalwrt.org/releases/21.02-SNAPSHOT/packages/aarch64_cortex-a53/luci" >> repositories.conf.new
