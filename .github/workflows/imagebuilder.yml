@@ -54,7 +54,7 @@ jobs:
       run: |
         [ -e files ] && mv files /workdir/imgbuilder/files
         [ -e $SDK_FEEDS_CONF ] && cat $SDK_FEEDS_CONF /workdir/sdk/feeds.conf.default > /workdir/sdk/feeds.conf
-        [ -e $SDK_CONFIG ] && mv $SDK_CONFIG /workdir/sdk/.config
+        [ -e $SDK_CONFIG ] && mv $SDK_CONFIG /workdir/sdk/diffconfig # Not .config here because will get overwritten by `./scripts/feeds update`
 
     - name: Compile packages
       run: |
