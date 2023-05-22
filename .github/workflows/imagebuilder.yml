@@ -49,12 +49,18 @@ jobs:
         curl -fSL "$SDK_URL" | tar xJf - -C sdk --strip-components 1
         echo Downloading Image Builder...
         curl -fSL "$IMGBUILDER_URL" | tar xJf - -C imgbuilder --strip-components 1
+    
+    # .config will be overwritten by `./scripts/feeds update`
+    - name: Configure SDK feeds
+      working-directory: /workdir/sdk
+      run: |
+        [ -e $GITHUB_WORKSPACE/$SDK_FEEDS_CONF ] && cat $GITHUB_WORKSPACE/$SDK_FEEDS_CONF feeds.conf.default > feeds.conf
+        ./scripts/feeds update -a
 
     - name: Load custom configuration
       run: |
         [ -e files ] && mv files /workdir/imgbuilder/files
-        [ -e $SDK_FEEDS_CONF ] && cat $SDK_FEEDS_CONF /workdir/sdk/feeds.conf.default > /workdir/sdk/feeds.conf
-        [ -e $SDK_CONFIG ] && mv $SDK_CONFIG /workdir/sdk/diffconfig # Not .config here because will get overwritten by `./scripts/feeds update`
+        [ -e $SDK_CONFIG ] && mv $SDK_CONFIG /workdir/sdk/.config
 
     - name: Compile packages
       run: |
@@ -66,6 +72,7 @@ jobs:
       run: |
         chmod +x $GITHUB_WORKSPACE/$IMAGE_BUILD_SH
         cd /workdir/imgbuilder
+        cp -vr /workdir/sdk/bin/packages/* packages/
         $GITHUB_WORKSPACE/$IMAGE_BUILD_SH
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
