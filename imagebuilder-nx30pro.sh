@@ -7,4 +7,4 @@ pkgs=(
     luci luci-i18n-base-zh-cn luci-i18n-opkg-zh-cn luci-i18n-firewall-zh-cn 
 )
 
-make image PROFILE="xiaomi_redmi-router-ax6s" PACKAGES="${pkgs[*]}" FILES="files"
+make image PROFILE="h3c_magic-nx30-pro" PACKAGES="${pkgs[*]}" FILES="files"

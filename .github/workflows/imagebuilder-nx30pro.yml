@@ -8,19 +8,19 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Image Builder
+name: Image Builder - H3C NX30 PRO
 
 on:
   push:
     branches:
-      - imagebuilder-22.03
+      - imagebuilder-master
   workflow_dispatch:
 
 env:
-  IMGBUILDER_URL: https://downloads.openwrt.org/releases/22.03.5/targets/mediatek/mt7622/openwrt-imagebuilder-22.03.5-mediatek-mt7622.Linux-x86_64.tar.xz
-  SDK_URL: https://downloads.openwrt.org/releases/22.03.5/targets/mediatek/mt7622/openwrt-sdk-22.03.5-mediatek-mt7622_gcc-11.2.0_musl.Linux-x86_64.tar.xz
+  IMGBUILDER_URL: https://downloads.openwrt.org/snapshots/targets/mediatek/filogic/openwrt-imagebuilder-mediatek-filogic.Linux-x86_64.tar.xz
+  SDK_URL: https://downloads.openwrt.org/snapshots/targets/mediatek/filogic/openwrt-sdk-mediatek-filogic_gcc-12.3.0_musl.Linux-x86_64.tar.xz
   PACKAGE_BUILD_SH: sdk.sh
-  IMAGE_BUILD_SH: imagebuilder.sh
+  IMAGE_BUILD_SH: imagebuilder-nx30pro.sh
   SDK_CONFIG: sdk.config
   SDK_FEEDS_CONF: sdk.feeds.conf
   TZ: Asia/Shanghai
