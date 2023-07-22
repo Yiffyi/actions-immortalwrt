@@ -7,4 +7,4 @@ pkgs=(
     luci luci-i18n-base-zh-cn luci-i18n-opkg-zh-cn luci-i18n-firewall-zh-cn 
 )
 
-make image PROFILE="openwrt-x86-64-generic" PACKAGES="${pkgs[*]}" FILES="files"
+make image PROFILE="generic" PACKAGES="${pkgs[*]}"
