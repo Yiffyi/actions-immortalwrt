@@ -11,14 +11,11 @@
 name: Image Builder - Redmi AX6s
 
 on:
-  push:
-    branches:
-      - imagebuilder-ax6s
   workflow_dispatch:
 
 env:
-  IMGBUILDER_URL: https://downloads.immortalwrt.org/releases/23.05.1/targets/mediatek/mt7622/immortalwrt-imagebuilder-23.05.1-mediatek-mt7622.Linux-x86_64.tar.xz
-  SDK_URL: https://downloads.immortalwrt.org/releases/23.05.1/targets/mediatek/mt7622/immortalwrt-sdk-23.05.1-mediatek-mt7622_gcc-12.3.0_musl.Linux-x86_64.tar.xz
+  IMGBUILDER_URL: https://downloads.immortalwrt.org/releases/23.05.2/targets/mediatek/mt7622/immortalwrt-imagebuilder-23.05.2-mediatek-mt7622.Linux-x86_64.tar.xz
+  SDK_URL: https://downloads.immortalwrt.org/releases/23.05.2/targets/mediatek/mt7622/immortalwrt-sdk-23.05.2-mediatek-mt7622_gcc-12.3.0_musl.Linux-x86_64.tar.xz
   PACKAGE_BUILD_SH: sdk.sh
   IMAGE_BUILD_SH: imagebuilder-ax6s.sh
   SDK_CONFIG: sdk.config
