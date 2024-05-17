@@ -11,6 +11,9 @@
 name: Image Builder - Redmi AX6s
 
 on:
+  push:
+    branches:
+      - imagebuilder-ax6s
   workflow_dispatch:
 
 env:
