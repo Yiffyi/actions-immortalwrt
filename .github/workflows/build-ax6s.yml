@@ -16,14 +16,26 @@ on:
       branch:
         description: 'REPO_BRANCH'
         required: false
-        default: 'openwrt-23.05'
+        default: 'v23.05.3'
+      repo:
+        description: 'REPO_URL'
+        required: false
+        default: 'https://github.com/openwrt/openwrt'
+      config:
+        description: 'CONFIG_FILE'
+        required: false
+        default: 'ax6s.config'
+      device:
+        description: 'DEVICE_NAME'
+        required: false
+        default: 'xiaomi_redmi-router-ax6s'
 
 env:
-  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_URL: ${{ inputs.repo }}
   REPO_BRANCH: ${{ inputs.branch }}
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: ax6s.config
-  DEVICE_NAME: h3c_magic-nx30-pro
+  CONFIG_FILE: ${{ inputs.config }}
+  DEVICE_NAME: ${{ inputs.device }}
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: false
