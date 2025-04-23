@@ -66,6 +66,19 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
+    - name: Cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          /workdir/openwrt/.ccache
+          /workdir/openwrt/staging_dir
+          /workdir/openwrt/build_dir
+        key: openwrt-build-${{ inputs.branch }}-${{ inputs.device }}-${{ hashFiles(inputs.config) }}
+        restore-keys: |
+          openwrt-build-${{ inputs.branch }}-${{ inputs.device }}-
+          openwrt-build-${{ inputs.branch }}-
+          openwrt-build-
+
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
