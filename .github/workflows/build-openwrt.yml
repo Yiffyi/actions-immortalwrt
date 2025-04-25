@@ -73,6 +73,8 @@ jobs:
           /workdir/openwrt/.ccache
           /workdir/openwrt/staging_dir
           /workdir/openwrt/build_dir
+          /workdir/openwrt/dl
+          /workdir/openwrt/tmp
         key: openwrt-build-${{ inputs.branch }}-${{ inputs.device }}-${{ hashFiles(inputs.config) }}
         restore-keys: |
           openwrt-build-${{ inputs.branch }}-${{ inputs.device }}-
