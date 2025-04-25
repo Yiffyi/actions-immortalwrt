@@ -74,6 +74,7 @@ jobs:
           /workdir/openwrt/staging_dir
           /workdir/openwrt/build_dir
           /workdir/openwrt/dl
+          /workdir/openwrt/feeds
           /workdir/openwrt/tmp
         key: openwrt-build-${{ inputs.branch }}-${{ inputs.device }}-${{ hashFiles(inputs.config) }}
         restore-keys: |
