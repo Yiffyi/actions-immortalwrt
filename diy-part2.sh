@@ -12,3 +12,17 @@
 
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
+
+cat <<EOF > package/base-files/files/etc/board.d/99-yiffyi
+. /lib/functions/uci-defaults.sh
+
+board_config_update
+
+#ucidef_set_timezone 'CST-8'
+ucidef_set_ntpserver 'ntp.sjtu.edu.cn' 'pool.ntp.org' 'time1.apple.com' 'time.cloudflare.com'
+ucidef_set_ssh_authorized_key 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKTLjpK+Muyugr2FJgl8GfXfbKBSKWSY1WLozAcJFYIG eddsa-key-20240129'
+
+board_config_flush
+
+exit 0
+EOF
