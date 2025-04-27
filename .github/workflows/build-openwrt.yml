@@ -56,8 +56,9 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
+        sudo mkdir -p /mnt/workdir
+        sudo ln -s /workdir /mnt/workdir
+        sudo chown $USER:$GROUPS /mnt/workdir /workdir
 
     - name: Clone source code
       working-directory: /workdir
